@@ -44,7 +44,7 @@ public class SimpleTextEditor extends JFrame {
             UIManager.setLookAndFeel(
                     UIManager.getCrossPlatformLookAndFeelClassName());
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
-            System.out.println("No s'ha establert el look desitjat: " + e);
+            System.out.println("Look and feel not found: " + e);
         }
 
         new SimpleTextEditor().setVisible(true);

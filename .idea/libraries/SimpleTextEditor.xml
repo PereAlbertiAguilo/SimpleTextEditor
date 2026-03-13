@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="SimpleTextEditor">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dist/SimpleTextEditor.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
