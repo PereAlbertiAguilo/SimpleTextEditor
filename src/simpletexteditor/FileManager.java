@@ -42,28 +42,22 @@ public class FileManager {
     }
 
     public void openFile(TextEditor textEditor) {
-        try {
-            int res = fileChooser.showOpenDialog(frame);
-            switch (res) {
-                case JFileChooser.APPROVE_OPTION -> {
-                    if (!saveChanges(textEditor)) {
-                        return;
-                    }
-
-                    File selectedFile = fileChooser.getSelectedFile();
-                    Path filePath = selectedFile.toPath();
-                    currentFile = selectedFile;
-
-                    String content = Files.readString(filePath);
-                    savedContent = content;
-                    textEditor.loadContent(content);
-                }
-                case JFileChooser.CANCEL_OPTION -> {
-                }
-
+        int res = fileChooser.showOpenDialog(frame);
+        if (res == JFileChooser.APPROVE_OPTION) {
+            if (!saveChanges(textEditor)) {
+                return;
             }
-        } catch (HeadlessException | IOException ex) {
-            showError(ex);
+
+            File selectedFile = fileChooser.getSelectedFile();
+            Path filePath = selectedFile.toPath();
+            currentFile = selectedFile;
+            try {
+                String content = Files.readString(filePath);
+                savedContent = content;
+                textEditor.loadContent(content);
+            } catch (IOException ex) {
+                showError(ex);
+            }
         }
     }
 
@@ -93,31 +87,32 @@ public class FileManager {
             return;
         }
 
-        try {
-            int res = fileChooser.showSaveDialog(frame);
-            if (res == JFileChooser.APPROVE_OPTION) {
-                File selectedFile = fileChooser.getSelectedFile();
-                System.out.println("" + selectedFile.getName());
-                if (selectedFile.exists()) {
-                    int opt = JOptionPane.showConfirmDialog(
-                            frame,
-                            "The file \"" + selectedFile.getName() + "\" already exists.\nDo you want to replace it?",
-                            "Confirm Overwrite",
-                            JOptionPane.YES_NO_OPTION,
-                            JOptionPane.WARNING_MESSAGE
-                    );
-                    if (opt == JOptionPane.NO_OPTION) {
-                        return;
-                    }
+        int res = fileChooser.showSaveDialog(frame);
+        if (res == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            System.out.println("" + selectedFile.getName());
+            if (selectedFile.exists()) {
+                int opt = JOptionPane.showConfirmDialog(
+                        frame,
+                        "The file \"" + selectedFile.getName() + "\" already exists.\nDo you want to replace it?",
+                        "Confirm Overwrite",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE
+                );
+                if (opt == JOptionPane.NO_OPTION) {
+                    return;
                 }
-                currentFile = selectedFile;
-                Files.writeString(currentFile.toPath(), textEditor.getText());
+            }
+            currentFile = selectedFile;
 
+            try {
+                Files.writeString(currentFile.toPath(), textEditor.getText());
                 savedContent = textEditor.getText();
                 textEditor.updateTitle();
+            } catch (IOException ex) {
+                showError(ex);
             }
-        } catch (HeadlessException | IOException ex) {
-            showError(ex);
+
         }
     }
 
