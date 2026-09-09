@@ -89,7 +89,6 @@ public class FileManager {
         int res = fileChooser.showSaveDialog(frame);
         if (res == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            System.out.println("" + selectedFile.getName());
             if (selectedFile.exists()) {
                 int opt = JOptionPane.showConfirmDialog(
                         frame,
